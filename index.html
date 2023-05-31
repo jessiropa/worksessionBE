@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD SEDERHANA - JESSI K. M. J. Ropa</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <style>
+        table,tr, th, tb{
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <!-- WORKING SESSION
+        Requirment :
+        1. Fitur creat
+        2. Fitur Update 
+        3. Fitur Read
+        4. Fitur Delete
+
+        Data yang dibutuhkan :
+        Nama lengkap, nim, prodi dan semester
+    -->
+
+    <div class="container">
+        <h1 style="text-align: center; margin-top: 20px;">CRUD SEDERHANA</h1>
+        <p style="text-align: center;">Crud data mahasiswa - Jessi K. M. J. Ropa</p><br>
+        <div>
+            <input type="text" id="nama" placeholder="Nama Lengkap">
+            <input type="text" id="nim" placeholder="NIM">
+            <input type="text" id="prodi" placeholder="Prodi">
+            <select id="semester">
+                <option value="">Pilih Semester</option>
+                <option value="Semester 2">Semester 2</option>
+                <option value="Semester 4">Semester 4</option>
+                <option value="Semester 6">Semester 6</option>
+                <option value="Semester 8">Semester 8</option>
+            </select>
+            <button id="button" onclick="createData()" class="btn btn-primary">Tambahkan</button>
+        </div>
+        <table style="margin-top: 15px;" class="table table-bordered table-dark table-striped">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Nama Lengkap</th>
+                    <th>NIM</th>
+                    <th>Program Studi</th>
+                    <th>Semester</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="result">
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        // GET DATA
+        const getData = async () => {
+            await axios.get(`http://localhost:3000/mahasiswa`)
+            .then((response) => {
+                let temp = ``; //variabel untuk tampung data
+                let mahasiswa = response.data; // data ditampung dalam variabel
+
+                // mengecek data apakah ada atau tidak 
+                if(mahasiswa.length > 0){
+                    for(let i = 0; i < mahasiswa.length; i++){ // perulangan untuk menampilkan data mahasiswa
+                        temp += `
+                        <tr>
+                            <td>${i+1}</td>
+                            <td>${mahasiswa[i].nama}</td>
+                            <td>${mahasiswa[i].nim}</td>
+                            <td>${mahasiswa[i].prodi}</td>
+                            <td>${mahasiswa[i].semester}</td>
+                            <td>
+                                <button onclick="editData('${mahasiswa[i].id}', '${mahasiswa[i].nama}', '${mahasiswa[i].nim}', '${mahasiswa[i].prodi}', '${mahasiswa[i].semester}')" class="btn btn-success">Edit</button>
+                                <button onclick="deleteData(${mahasiswa[i].id})" class="btn btn-danger">Delete</button>
+                            </td>
+                        </tr>
+                        
+                        `
+                    }
+                }else{
+                    temp = `
+                <tr>
+                    <td colspan="5" style="text-align: center">Data empty</td>
+                </tr>
+                `;
+                }
+                
+                document.getElementById('result').innerHTML = temp
+                // console.log(response.data);
+            })
+            .catch((error) => {
+                let temp = `
+                <tr>
+                    <td colspan="5" style="text-align: center">${error.message}</td>
+                </tr>
+                `;
+                document.getElementById('result').innerHTML = temp
+                // console.log(error.message);
+            })
+        }
+        getData();
+
+        // DELETE DATA
+        const deleteData = async (id) => {
+            await axios.delete(`http://localhost:3000/mahasiswa/${id}`)
+            .then((respons) => {
+                alert("Yakin ingin hapus data ?");
+            })
+            .catch((error) => {
+                alert(`${error.message}`);
+            })
+        }
+
+        // CREATE DATA 
+        const createData = async () => {
+            let namaF = document.getElementById('nama').value;
+            let nimF = document.getElementById('nim').value;
+            let prodiF = document.getElementById('prodi').value;
+            let semesterF = document.getElementById('semester').value;
+
+            await axios.post(`http://localhost:3000/mahasiswa`, {
+                nama: namaF,
+                nim: nimF,
+                prodi: prodiF,
+                semester: semesterF
+            })
+            .then((respon) => {
+                console.log(respon);
+            })
+            .catch((error) =>{
+                console.log(error.message);
+            })
+        }
+    
+        // EDIT DATA 
+        const editData = async (id, nama, nim, prodi, semester) => {
+            document.getElementById('nama').value = nama;
+            document.getElementById('nim').value = nim;
+            document.getElementById('prodi').value = prodi;
+            document.getElementById('semester').value = semester;
+            document.getElementById('button').innerHTML = 'Simpan';
+            document.getElementById('button').setAttribute('onclick', `updateData(${id})`);
+        }
+        // UPDATE DATA 
+        const updateData = async(id) =>{
+            let namaF = document.getElementById('nama').value;
+            let nimF = document.getElementById('nim').value;
+            let prodiF = document.getElementById('prodi').value;
+            let semesterF = document.getElementById('semester').value;
+
+            await axios.patch(`http://localhost:3000/mahasiswa/${id}`, {
+                nama: namaF,
+                nim: nimF,
+                prodi: prodiF,
+                semester: semesterF
+            })
+            .then((respon) => {
+                console.log(respon);
+            })
+            .catch((error) =>{
+                console.log(error.message);
+            })
+        }
+    </script>
+</body>
+</html>

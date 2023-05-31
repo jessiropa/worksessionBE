@@ -1,0 +1,46 @@
+{
+  "mahasiswa": [
+    {
+      "nama": "Jessy Chrystin",
+      "nim": "20231235",
+      "prodi": "Ilmu Komputer",
+      "semester": "Semester 6",
+      "id": 2
+    },
+    {
+      "nama": "Dian Putri",
+      "nim": "20221234",
+      "prodi": "Teknik Mesin",
+      "semester": "Semester 4",
+      "id": 3
+    },
+    {
+      "nama": "Karin Ayu",
+      "nim": "20201236",
+      "prodi": "Fisika",
+      "semester": "Semester 4",
+      "id": 4
+    },
+    {
+      "nama": "Fanny Tina",
+      "nim": "20181224",
+      "prodi": "Ilmu Komputer",
+      "semester": "Semester 8",
+      "id": 5
+    },
+    {
+      "nama": "Tesa Gracia",
+      "nim": "20191278",
+      "prodi": "Teknik Arsitek",
+      "semester": "Semester 4",
+      "id": 6
+    },
+    {
+      "nama": "Salsabila Septiani",
+      "nim": "20181203",
+      "prodi": "Biologi",
+      "semester": "Semester 6",
+      "id": 7
+    }
+  ]
+}
